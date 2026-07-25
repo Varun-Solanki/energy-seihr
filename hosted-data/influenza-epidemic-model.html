@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analysis and Optimal Control of a Fractional Order Influenza Epidemic Model</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: #f6f4ef;
+      color: #222;
+      line-height: 1.65;
+    }
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 24px 72px;
+    }
+    h1 {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      margin: 0 0 28px;
+      color: #16324f;
+      letter-spacing: 0;
+    }
+    p {
+      font-size: 1.08rem;
+      margin: 0 0 20px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Analysis and Optimal Control of a Fractional Order Influenza Epidemic Model</h1>
+
+    <p>This paper develops a mathematical model for seasonal influenza that explicitly accounts for memory effects, meaning that current disease transmission is influenced by earlier biological and environmental conditions. The authors connect this idea to prolonged exposure to ambient air pollution, especially pollutants such as PM2.5, NO2, and SO2, which can weaken respiratory defenses and increase susceptibility over periods longer than a typical influenza infection. The central claim is that standard ordinary differential equation models can miss these lingering effects because they treat disease dynamics as depending mainly on the present state of the population.</p>
+
+    <p>The model is a fractional-order SEImIsHRD system. It separates the population into susceptible, exposed, mildly infectious, severely infectious, hospitalized, recovered, and dead groups. The fractional behavior is represented with the Atangana-Baleanu derivative in the Caputo sense, which uses a non-singular Mittag-Leffler kernel. This choice is important because it allows the influence of the past to fade gradually rather than behaving as an unrealistic instant or fixed-delay effect. In the paper, the fractional order acts as the parameter controlling the strength of memory; values closer to 1 resemble a classical model, while lower values represent stronger memory.</p>
+
+    <p>The authors prove basic mathematical properties of the model, including positivity and boundedness of solutions, and then derive the basic reproduction number, R0, using the next-generation matrix method. A key result is that R0 depends on the epidemiological parameters but not directly on the fractional order. The disease-free equilibrium is locally asymptotically stable when R0 is less than 1 and unstable when R0 is greater than 1. The paper also discusses endemic equilibrium behavior when R0 exceeds 1 and uses sensitivity analysis to identify which parameters most influence outbreak potential.</p>
+
+    <p>Using the baseline parameters in the study, the authors report a baseline R0 of about 3.0. The reproduction number is most sensitive to the recruitment term and the effective transmission rate, while recovery and hospitalization-related parameters reduce the long-term infectious burden. The sensitivity findings point toward practical intervention priorities: measures that lower transmission should have the strongest immediate effect on epidemic potential, while faster recovery and hospitalization pathways reduce persistence and severity.</p>
+
+    <p>The numerical simulations show that memory effects substantially change the outbreak profile. When the fractional order is reduced from near-classical values such as 0.99 to stronger-memory cases such as 0.94 and 0.88, outbreaks last longer and decline more slowly. This means that, in environments where pollution or other cumulative stressors have persistent health effects, a short intervention window may not be enough even if it would look sufficient under a classical model.</p>
+
+    <p>The optimal control part of the paper studies two time-dependent strategies. The first, u1(t), reduces transmission through prevention measures such as masking, distancing, or intensified action during pollution peaks. The second, u2(t), increases recovery from mild infection, which the paper frames as improved vaccination, treatment, or recovery support. The simulations use a 350-day time horizon, upper bounds of 0.5 for both controls, and objective weights that prioritize reductions in severe infections and hospitalizations while accounting for intervention cost.</p>
+
+    <p>The prevention control is especially effective at lowering the peaks of exposed, mild, severe, and hospitalized compartments. Under stronger memory, the best prevention strategy reaches maximum effort later and stays active for much longer, often nearly to the end of the simulation. The recovery-enhancement strategy also improves outcomes by shortening the mild infectious period, increasing the recovered population faster, and indirectly reducing severe cases and hospitalizations. However, in the simulations, prevention has the more visible effect on suppressing severe infections and hospital demand.</p>
+
+    <p>The main conclusion is that fractional-order modeling can capture persistent environmental and biological effects that classical influenza models may overlook. The paper argues that when system memory is strong, interventions must be sustained for longer periods and should be planned with the history of exposure and disease progression in mind. The authors also acknowledge that the work is mainly theoretical and depends on parameter assumptions from previous studies. They recommend future work using real epidemiological and environmental data to estimate the fractional order, calibrate the model more directly, and test combined prevention and recovery controls.</p>
+  </main>
+</body>
+</html>

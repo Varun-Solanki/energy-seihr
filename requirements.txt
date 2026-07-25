@@ -1,0 +1,9 @@
+numpy
+pandas
+networkx
+matplotlib
+python-dotenv
+tavily-python
+openai
+requests
+pytest

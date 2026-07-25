@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.env.local
+.pytest_cache/
+.mypy_cache/
+outputs/
+data/raw/
+data/processed/
+data/ground_truth/
+knowledge_graph/graph.gexf

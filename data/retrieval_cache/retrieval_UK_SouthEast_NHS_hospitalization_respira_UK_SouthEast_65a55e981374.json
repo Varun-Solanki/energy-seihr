@@ -1,0 +1,77 @@
+{
+  "query": "UK_SouthEast NHS hospitalization respiratory health air quality pollution PM2.5 2026-07-25 2027-12-31",
+  "tavily_results": [
+    {
+      "url": "https://uk-air.defra.gov.uk/air-pollution/daqi?pollutant=pm25&view=more-info",
+      "title": "What is the Daily Air Quality Index?\n     \n - DEFRA UK Air - GOV.UK",
+      "content": "#### PM2.5 Particles\n\nBased on the daily mean concentration for historical data, latest 24 hour running mean for the current day.\n\n| Index | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n ---  ---  ---  ---  --- \n| Band | Low | Low | Low | Moderate | Moderate | Moderate | High | High | High | Very High |\n| \u00b5gm-3 | 0-11 | 12-23 | 24-35 | 36-41 | 42-47 | 48-53 | 54-58 | 59-64 | 65-70 | 71 or more |\n\n## Additional information for data providers\n\nDefra has written a report describing how the index has been implemented, including details on use of the running 24-hour mean for the latest monitoring data on UK-AIR and the use of triggers to predict air pollution episodes. This report describes updates to the thresholds used and may be of interest to air quality data providers. [...] Ozone\n Nitrogen Dioxide\n Sulphur Dioxide\n PM2.5 Particles\n PM10 Particles\n\n#### PM2.5 Particles\n\nBased on the daily mean concentration for historical data, latest 24 hour running mean for the current day.\n\n| Index | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n ---  ---  ---  ---  --- \n| Band | Low | Low | Low | Moderate | Moderate | Moderate | High | High | High | Very High |\n| \u00b5gm-3 | 0-11 | 12-23 | 24-35 | 36-41 | 42-47 | 48-53 | 54-58 | 59-64 | 65-70 | 71 or more |\n\n## Additional information for data providers [...] You should follow the 3 step method to use the index.\n\nDefra applies the DAQI to its air quality forecasts to tell you what pollution levels are predicted to be the next day. The forecasts are provided to allow you to plan ahead and where relevant, take the recommended action to reduce the effects of air pollution. In addition, Defra's latest air pollution monitoring data are displayed using the same index and this tells you what pollution has been like.\n\nThe overall air pollution index for a site or region is determined by the highest concentration of five pollutants:\n\n Nitrogen Dioxide\n Sulphur Dioxide\n Ozone\n Particles < 2.5\u00b5m (PM2.5)\n Particles < 10\u00b5m (PM10)\n\n## Boundaries Between Index Points for Each Pollutant\n\nUse the tabs below to view the bandings for each pollutant.",
+      "score": 0.34541488,
+      "raw_content": null
+    },
+    {
+      "url": "https://uk-air.defra.gov.uk/reports/cat14/1210261047_Individuals_interpretation_of_air_quality_information_customer_insight_&_awareness_study.pdf",
+      "title": "Individuals' interpretation of Air Quality Information",
+      "content": "3.1). \u201c0 - 500 scale not really meaningful\u201d. (R229) [USA AQI] \u201cThe numerical value seems redundant; no advice\u201d. (R126) [USA AQI] \u201cI don\u201ft know why this one goes up to 200, why can\u201ft it be just a percentage number?\u201d (Male, no health condition, 55-64) [Australia AQI] \u201cThat one there, says 1-33, what does that mean? 33 what? Numbers 1 to 10 you can deal with can\u201ft you\u201d (Female, no health condition, 25-33) [USA AQI] \u201cThe numbering system is too large; most members of the public won't get it\u201d. (R211) [USA AQI] 5.6 Summary This research has indicated that, whilst participants were interested in air quality information, and aware of the relationship between air quality and health, they are not aware of the existing UK air quality index. This lack of awareness includes those without respiratory [...] questionnaire respondents (90%, n=330/365) indicated that they were aware of a link between air pollution and health (27 responses from those who worked in air quality or health were excluded). When asked what they perceived the effects of air quality on health were, many research participants were conscious that it affected breathing. For example; \u201cMakes it harder to breathe, walking feels like running. I need to use my inhaler, which has side effects (like drinking double espressos too fast). If bad enough/I do not take my inhaler fast enough - asthma attack\u201d. (R8) \u201cPollution affects my asthma, causing wheezing, coughing, etc. It irritates my eyes and I suspect it also affects my overall health and wellbeing\u201d. (R45) As expected, those with respiratory or heart conditions were more aware [...] those with respiratory or heart conditions were more aware of the effects of air quality on health than those without. Reported perceived effects included breathlessness, difficultly breathing and exacerbation of existing conditions. Participants were then asked whom they supposed were affected by air pollution (see Figure 4.4). They were asked to identify as many \u201egroups\u201f as they could, that they perceived were at risk. The majority of respondents (82%, n=268/327) were aware that people with respiratory conditions are affected by air pollution (see Figure 4.4). Just under two thirds (66% n=215/327) of participants recognised that children may also be affected, while over half of respondents (58%, n=188/327) thought that air pollution could affect the elderly. Only 38% of participants",
+      "score": 0.3442235,
+      "raw_content": null
+    },
+    {
+      "url": "https://uk-air.defra.gov.uk/air-pollution/daqi?view=more-info&pollutant=pm25",
+      "title": "What is the Daily Air Quality Index? - DEFRA UK Air - GOV.UK",
+      "content": "Ozone\n Nitrogen Dioxide\n Sulphur Dioxide\n PM2.5 Particles\n PM10 Particles\n\n#### PM2.5 Particles\n\nBased on the daily mean concentration for historical data, latest 24 hour running mean for the current day.\n\n| Index | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n ---  ---  ---  ---  --- \n| Band | Low | Low | Low | Moderate | Moderate | Moderate | High | High | High | Very High |\n| \u00b5gm-3 | 0-11 | 12-23 | 24-35 | 36-41 | 42-47 | 48-53 | 54-58 | 59-64 | 65-70 | 71 or more |\n\n## Additional information for data providers [...] You should follow the 3 step method to use the index.\n\nDefra applies the DAQI to its air quality forecasts to tell you what pollution levels are predicted to be the next day. The forecasts are provided to allow you to plan ahead and where relevant, take the recommended action to reduce the effects of air pollution. In addition, Defra's latest air pollution monitoring data are displayed using the same index and this tells you what pollution has been like.\n\nThe overall air pollution index for a site or region is determined by the highest concentration of five pollutants:\n\n Nitrogen Dioxide\n Sulphur Dioxide\n Ozone\n Particles < 2.5\u00b5m (PM2.5)\n Particles < 10\u00b5m (PM10)\n\n## Boundaries Between Index Points for Each Pollutant\n\nUse the tabs below to view the bandings for each pollutant.",
+      "score": 0.3375097,
+      "raw_content": null
+    },
+    {
+      "url": "https://uk-air.defra.gov.uk/library/reports?report_id=1023",
+      "title": "Report: Modelling of future PM2.5 in support of the Defra air quality target setting process - DEFRA UK Air - GOV.UK",
+      "content": "### Related downloads...\n Download Adobe Acrobat Reader (for PDF files)\n Download MS Excel Viewer (for XLS files)\n Download MS Powerpoint Viewer (for PPT files) [...] Additional Documents:\n\n Call for Evidence on future PM2.5 concentrations: Summary of responses and government response (PDF79.99 KB)\n\nShare this page:      (What are these?)\n\nReturn to Library homepage",
+      "score": 0.26800448,
+      "raw_content": null
+    },
+    {
+      "url": "https://uk-air.defra.gov.uk/library/reports.php?report_id=1023",
+      "title": "Report: Modelling of future PM2.5 in support of the Defra air quality target setting process - DEFRA UK Air - GOV.UK",
+      "content": "### Related downloads...\n Download Adobe Acrobat Reader (for PDF files)\n Download MS Excel Viewer (for XLS files)\n Download MS Powerpoint Viewer (for PPT files) [...] Additional Documents:\n\n Call for Evidence on future PM2.5 concentrations: Summary of responses and government response (PDF79.99 KB)\n\nShare this page:      (What are these?)\n\nReturn to Library homepage",
+      "score": 0.26800448,
+      "raw_content": null
+    }
+  ],
+  "graph_context": [
+    "UK_Yorkshire: N/A "
+  ],
+  "local_documents": [
+    {
+      "title": "Source Sector and Fuel Contributions to Ambient PM2.5 Mortality",
+      "path": "C:\\Users\\Varun\\OneDrive\\Desktop\\energy-seihr\\hosted-data\\pm25-source-sector-mortality.html",
+      "score": 30,
+      "snippet": "Source Sector and Fuel Contributions to Ambient PM2.5 Mortality Source Sector and Fuel Contributions to Ambient PM2.5 Mortality This paper provides a global assessment of which sectors and fuels contribute most to ambient PM2.5 exposure and PM2.5-attributable mortality. The motivation is practical: fine particulate matter is the world's leading environmental health risk, but effective air quality policy requires knowing which sources drive the burden in different places. The study covers 21 world regions, 204 countries, and 200 sub-national areas, allowing comparison across global, national, and urban-relevant scales. The methodology combines atmospheric modeling, satellite-based exposure estimates, emissions inventories, and disease-specific health risk functions. The authors ran 24 sensitivity simulations with the GEOS-Chem global chemical transport model to estimate source and fuel co"
+    },
+    {
+      "title": "WHO Global Air Quality Guidelines",
+      "path": "C:\\Users\\Varun\\OneDrive\\Desktop\\energy-seihr\\hosted-data\\who-air-quality-guidelines.html",
+      "score": 30,
+      "snippet": "WHO Global Air Quality Guidelines WHO Global Air Quality Guidelines The WHO global air quality guidelines provide health-based recommendations for reducing exposure to major outdoor air pollutants: PM2.5, PM10, ozone, nitrogen dioxide, sulfur dioxide, and carbon monoxide. The central message is that air pollution is the single largest environmental threat to human health and causes millions of deaths and lost healthy life years each year. The burden is now described as comparable to major global risks such as unhealthy diets and tobacco smoking. The guidelines update the previous WHO air quality guidance published in 2006. WHO explains that the evidence base expanded substantially over the intervening 15 years, including studies from lower-pollution high-income settings and from low- and middle-income countries experiencing rapid urbanization and industrial growth. The newer evidence sho"
+    },
+    {
+      "title": "Clean Air Strategy 2019 Executive Summary",
+      "path": "C:\\Users\\Varun\\OneDrive\\Desktop\\energy-seihr\\hosted-data\\clean-air-strategy-2019.html",
+      "score": 25,
+      "snippet": "Clean Air Strategy 2019 Executive Summary Clean Air Strategy 2019 Executive Summary The Clean Air Strategy presents the UK government's plan to reduce air pollution from all major sources, improve public health, protect the natural environment, and support cleaner economic growth. It begins from the position that the country has already reduced many of the worst pollution problems through regulation, industrial investment, and a cleaner energy mix, but that air pollution remains one of the UK's largest public health challenges. The strategy stresses that harmful emissions now come from many diffuse sources, not only from large factories or road traffic. The document identifies air pollution as a result of how the UK generates power, heats homes, produces food, manufactures goods, and moves people and freight. It focuses on five damaging pollutants covered by legally binding international"
+    },
+    {
+      "title": "Environmental Burden of Disease from Coal-Fired Power Plants in Germany",
+      "path": "C:\\Users\\Varun\\OneDrive\\Desktop\\energy-seihr\\hosted-data\\coal-power-burden-germany.html",
+      "score": 18,
+      "snippet": "Environmental Burden of Disease from Coal-Fired Power Plants in Germany Environmental Burden of Disease from Coal-Fired Power Plants in Germany This study estimates the health burden in Germany caused by long-term exposure to nitrogen dioxide and PM2.5 emissions from hard coal- and lignite-fired power plants in 2015. The authors focus on source-specific disease burden rather than total air pollution, asking how much disease could be attributed specifically to emissions from these coal power plants. The central conclusion is that both hard coal and lignite contributed a measurable burden of disease, with lignite producing the larger impact for both pollutants. The methodology combines air pollution modeling, population exposure assessment, and health burden calculation. The researchers used the REM-CALGRID chemical transport model to estimate how emissions from hard coal and lignite plant"
+    },
+    {
+      "title": "Analysis and Optimal Control of a Fractional Order Influenza Epidemic Model",
+      "path": "C:\\Users\\Varun\\OneDrive\\Desktop\\energy-seihr\\hosted-data\\influenza-epidemic-model.html",
+      "score": 10,
+      "snippet": "Epidemic Model This paper develops a mathematical model for seasonal influenza that explicitly accounts for memory effects, meaning that current disease transmission is influenced by earlier biological and environmental conditions. The authors connect this idea to prolonged exposure to ambient air pollution, especially pollutants such as PM2.5, NO2, and SO2, which can weaken respiratory defenses and increase susceptibility over periods longer than a typical influenza infection. The central claim is that standard ordinary differential equation models can miss these lingering effects because they treat disease dynamics as depending mainly on the present state of the population. The model is a fractional-order SEImIsHRD system. It separates the population into susceptible, exposed, mildly infectious, severely infectious, hospitalized, recovered, and dead groups. The fractional behavior is"
+    }
+  ],
+  "timestamp": "2026-07-25T17:01:56.540298",
+  "cache_hit": false
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Coupled SEIHR Parameter Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "region": { "type": "string" },
+    "beta_base": { "type": "number", "minimum": 0, "maximum": 2 },
+    "sigma": { "type": "number", "minimum": 0, "maximum": 1 },
+    "gamma": { "type": "number", "minimum": 0, "maximum": 1 },
+    "eta": { "type": "number", "minimum": 0, "maximum": 1 },
+    "rho": { "type": "number", "minimum": 0, "maximum": 1 },
+    "omega": { "type": "number", "minimum": 0, "maximum": 0.1 },
+    "beta_sensitivity": { "type": "number", "minimum": 0, "maximum": 5 },
+    "x_scale": { "type": "number", "minimum": 0, "maximum": 1 },
+    "kappa": { "type": "number", "minimum": 0, "maximum": 0.1 },
+    "lambda_rate": { "type": "number", "minimum": 0, "maximum": 0.2 },
+    "psi_transport": { "type": "number", "minimum": 0, "maximum": 0.01 },
+    "phi_transport": { "type": "number", "minimum": 0, "maximum": 0.01 },
+    "transboundary_lag_days": { "type": "integer", "minimum": 1, "maximum": 365 },
+    "s0": { "type": "number", "minimum": 0 },
+    "e0": { "type": "number", "minimum": 0 },
+    "i0": { "type": "number", "minimum": 0 },
+    "h0": { "type": "number", "minimum": 0 },
+    "r0": { "type": "number", "minimum": 0 },
+    "x0": { "type": "number", "minimum": 0, "maximum": 1 },
+    "pollution_lag_days": { "type": "integer", "minimum": 1, "maximum": 365 },
+    "policy_response_days": { "type": "integer", "minimum": 1, "maximum": 365 }
+  },
+  "required": ["region", "beta_base", "sigma", "gamma", "eta", "rho", "omega", "s0", "e0", "i0", "h0", "r0", "x0"]
+}

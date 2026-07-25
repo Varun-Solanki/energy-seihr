@@ -1,0 +1,292 @@
+Implementation Plan — Final Version
+What The System Does
+
+User inputs a scenario in plain language. System retrieves relevant historical context from curated hosted pages via Tavily. LLM estimates ODE parameters from that context. ODE engine simulates health and energy trajectories forward. Results are plots and JSON outputs.
+
+Ground truth validation runs separately on past known events to prove the system is accurate before trusting future predictions.
+
+Tech Stack
+Language:          Python 3.11+
+ODE Solver:        Custom RK4 (NumPy)
+LLM:               Claude API (claude-sonnet-4-6)
+Web Retrieval:     Tavily API (1000 free calls/month)
+Knowledge Graph:   NetworkX (local, saved as .gexf)
+Data Processing:   pandas, numpy
+Output:            matplotlib (plots), JSON, CSV
+Hosting:           GitHub Pages (static HTML, free)
+Config:            python-dotenv
+Testing:           pytest
+Version Control:   Git + GitHub
+GitHub Pages — What You Host
+
+These are static HTML pages Tavily is allowed to search. You write them once, push to GitHub Pages, done.
+
+hosted-data/
+├── energy/
+│   ├── uk_generation_mix.html       ← National Grid ESO data
+│   ├── coal_plant_closures.html     ← DUKES closure timeline
+│   └── fossil_dependency_index.html ← calculated X values by year
+├── health/
+│   ├── nhs_respiratory_admissions.html  ← NHS HES data
+│   └── ons_mortality_trends.html         ← ONS mortality data
+├── pollution/
+│   ├── defra_pm25_annual.html       ← UK-AIR PM2.5 readings
+│   └── emep_transboundary.html      ← cross-border pollution data
+└── papers/
+    ├── fractional_influenza_2025.html    ← paper 1 summary
+    ├── harvard_pm25_attribution.html     ← paper 2 summary
+    ├── german_coal_ebd.html              ← paper 3 summary
+    ├── who_air_quality_guidelines.html   ← WHO guidelines
+    └── uk_clean_air_strategy.html        ← DEFRA strategy doc
+
+Each HTML page is a clean readable summary of that data source. Not raw CSV dumps. Readable paragraphs with key numbers so Tavily can extract meaningful text.
+
+Tavily Setup
+python
+ALLOWED_URLS = [
+    "https://yourusername.github.io/energy-health-data/energy/uk_generation_mix.html",
+    "https://yourusername.github.io/energy-health-data/energy/coal_plant_closures.html",
+    "https://yourusername.github.io/energy-health-data/health/nhs_respiratory_admissions.html",
+    "https://yourusername.github.io/energy-health-data/health/ons_mortality_trends.html",
+    "https://yourusername.github.io/energy-health-data/pollution/defra_pm25_annual.html",
+    "https://yourusername.github.io/energy-health-data/pollution/emep_transboundary.html",
+    "https://yourusername.github.io/energy-health-data/papers/fractional_influenza_2025.html",
+    "https://yourusername.github.io/energy-health-data/papers/harvard_pm25_attribution.html",
+    "https://yourusername.github.io/energy-health-data/papers/german_coal_ebd.html",
+    "https://yourusername.github.io/energy-health-data/papers/who_air_quality_guidelines.html",
+    "https://yourusername.github.io/energy-health-data/papers/uk_clean_air_strategy.html",
+]
+
+Tavily gets the scenario as the search query and only searches within these URLs.
+
+Knowledge Graph — What It Stores
+
+Tavily handles text retrieval. The knowledge graph handles structured causal chains that don't exist anywhere on the web in queryable form.
+
+NODES:
+  Region        → "UK_Yorkshire", "UK_SouthEast"
+  PowerPlant    → "Drax_Unit1", "Ratcliffe_on_Soar"
+  PolicyEvent   → "UK_Coal_Phase_Out_Announcement_2015"
+  EnergyEvent   → "Drax_Unit1_Closure_April_2023"
+  PollutionEvent→ "PM25_Drop_Yorkshire_Oct_2023"
+  HealthEvent   → "Respiratory_Admissions_Drop_Q1_2024"
+  TimePeriod    → "2023_Q2", "2023_Q4"
+
+EDGES:
+  PolicyEvent  -[TRIGGERED]->   EnergyEvent
+  EnergyEvent  -[PRECEDED]->    PollutionEvent   (lag: 6 months)
+  PollutionEvent-[PRECEDED]->   HealthEvent      (lag: 3 months)
+  Region       -[DOWNWIND_OF]-> Region           (Psi source)
+  PowerPlant   -[LOCATED_IN]->  Region
+
+This gives the LLM structured answers to questions like:
+"What happened to health outcomes 9 months after a similar plant closure?"
+
+Folder Structure
+energy-health-seihr/
+│
+├── README.md
+├── requirements.txt
+├── .env.example                     ← ANTHROPIC_API_KEY, TAVILY_API_KEY
+├── .gitignore
+│
+├── config/
+│   └── settings.py                  ← all constants, API keys, allowed URLs
+│
+├── hosted_data/                     ← pushed to GitHub Pages
+│   ├── energy/
+│   │   ├── uk_generation_mix.html
+│   │   ├── coal_plant_closures.html
+│   │   └── fossil_dependency_index.html
+│   ├── health/
+│   │   ├── nhs_respiratory_admissions.html
+│   │   └── ons_mortality_trends.html
+│   ├── pollution/
+│   │   ├── defra_pm25_annual.html
+│   │   └── emep_transboundary.html
+│   └── papers/
+│       ├── fractional_influenza_2025.html
+│       ├── harvard_pm25_attribution.html
+│       ├── german_coal_ebd.html
+│       ├── who_air_quality_guidelines.html
+│       └── uk_clean_air_strategy.html
+│
+├── knowledge_graph/
+│   ├── builder.py                   ← builds NetworkX graph from raw data
+│   ├── querier.py                   ← query interface
+│   ├── graph.gexf                   ← saved graph (auto-generated)
+│   └── node_types.py                ← node/edge definitions
+│
+├── rag/
+│   └── retriever.py                 ← Tavily search + graph query combined
+│
+├── llm/
+│   ├── estimator.py                 ← calls Claude, gets parameters
+│   ├── validator.py                 ← validates parameter JSON
+│   └── prompts/
+│       ├── system_prompt.txt
+│       └── examples/
+│           └── drax_closure_2023.json
+│
+├── core/
+│   ├── parameters.py                ← dataclasses for all 30 params
+│   ├── ode_engine.py                ← RK4 solver, 18 coupled ODEs
+│   └── runner.py                    ← orchestrates full run
+│
+├── math/
+│   ├── equations.md
+│   ├── parameters_guide.md
+│   └── initial_values.json
+│
+├── contracts/
+│   └── parameter_schema.json
+│
+├── data/
+│   ├── raw/                         ← downloaded CSVs from gov sources
+│   │   ├── energy/
+│   │   ├── health/
+│   │   └── pollution/
+│   ├── processed/
+│   │   ├── events_timeline.json     ← structured historical events
+│   │   └── initial_conditions.json  ← SEIHR starting values
+│   └── ground_truth/
+│       └── uk_coal_phaseout.json    ← validation answer key
+│
+├── validation/
+│   ├── backtest.py                  ← runs sim on past event, checks accuracy
+│   ├── metrics.py                   ← MSE, trajectory error calculations
+│   └── weight_adjuster.py           ← adjusts retrieval weights post-backtest
+│
+├── outputs/
+│   ├── trajectories/                ← JSON simulation outputs
+│   ├── plots/                       ← matplotlib figures
+│   └── results/                     ← metrics tables, CSV exports
+│
+├── scripts/
+│   ├── build_knowledge_graph.py     ← one-time setup script
+│   ├── prepare_ground_truth.py      ← processes raw CSVs to ground_truth.json
+│   └── build_hosted_pages.py        ← generates HTML pages from raw data
+│
+└── tests/
+    ├── test_ode.py
+    ├── test_llm.py
+    ├── test_rag.py
+    └── test_knowledge_graph.py
+The Complete Pipeline — Step By Step
+Phase 1 — One Time Setup (you run these once)
+STEP 1: Download raw data
+  → National Grid ESO CSVs
+  → NHS HES data
+  → DEFRA air quality CSVs
+  → Save to data/raw/
+
+STEP 2: Run scripts/prepare_ground_truth.py
+  → Cleans raw CSVs
+  → Extracts observed X and H values per quarter
+  → Saves to data/ground_truth/uk_coal_phaseout.json
+
+STEP 3: Run scripts/build_knowledge_graph.py
+  → Reads events_timeline.json
+  → Builds NetworkX graph
+  → Saves graph.gexf
+
+STEP 4: Run scripts/build_hosted_pages.py
+  → Converts raw data into readable HTML pages
+  → Saves to hosted_data/
+
+STEP 5: Push hosted_data/ to GitHub Pages
+  → Tavily can now search these URLs
+Phase 2 — Every Simulation Run
+STEP 1: User inputs scenario
+  "What happens if UK closes all remaining
+   gas plants by 2027 in Yorkshire?"
+
+STEP 2: rag/retriever.py runs
+  → Tavily searches allowed URLs with scenario as query
+  → Returns relevant content (energy data, health data,
+    paper excerpts, policy context)
+  → NetworkX graph queried for similar past events
+    and their causal chains
+  → Both results combined into context block
+
+STEP 3: llm/estimator.py runs
+  → Sends to Claude:
+      - User scenario
+      - Tavily retrieved content
+      - Graph query results
+      - Parameter schema
+      - System prompt
+  → Claude outputs 30 parameters as JSON
+
+STEP 4: llm/validator.py runs
+  → Checks all ranges valid
+  → Clamps out-of-range values
+  → Returns clean parameter dict
+
+STEP 5: core/runner.py runs
+  → Loads initial conditions
+  → Passes parameters to ODE engine
+  → RK4 integrates 18 coupled ODEs forward
+  → Returns trajectory JSON
+
+STEP 6: Outputs generated
+  → outputs/trajectories/scenario_name.json
+  → outputs/plots/trajectory_plot.png
+  → outputs/plots/scenario_comparison.png
+Phase 3 — Validation (runs separately)
+STEP 1: validation/backtest.py runs on past event
+  → Takes Drax closure 2023 as input
+  → Runs full pipeline
+  → Gets predicted trajectories
+
+STEP 2: validation/metrics.py runs
+  → Loads ground_truth/uk_coal_phaseout.json
+  → Compares predicted vs actual
+  → Calculates MSE and trajectory error
+
+STEP 3: validation/weight_adjuster.py runs
+  → If retrieval led to accurate prediction →
+    those graph nodes weighted higher next time
+  → If retrieval led to poor prediction →
+    those graph nodes weighted lower
+
+STEP 4: Results saved
+  → outputs/results/backtest_metrics.csv
+Results You Show
+RESULT 1 — Trajectory Plot
+  S, E, I, H, R and X over simulated time period
+  For the user-given scenario
+  Clear visual of health improving as fossil
+  dependency drops
+
+RESULT 2 — Scenario Comparison Plot
+  Three lines on same graph:
+  Scenario A: close gas plants by 2027
+  Scenario B: close gas plants by 2032
+  Scenario C: no change (counterfactual)
+  Shows hospitalization difference between choices
+
+RESULT 3 — Validation Table
+  Predicted vs actual for past known event
+  Per-quarter error percentages
+  Single average error number
+  "Our system predicted H with 5.4% average error"
+
+RESULT 4 — Transboundary Effect Plot
+  Region A (has plants) vs Region B (downwind)
+  Shows Region B health improving when
+  Region A's fossil dependency drops
+  Even though Region B made no policy change
+
+RESULT 5 — RAG Retrieval Trace
+  For one run, print exactly:
+  "Query: gas plant closure Yorkshire 2027"
+  "Retrieved: Drax closure 2023 (relevance 0.89)"
+  "Retrieved: Ferrybridge closure 2016 (relevance 0.81)"
+  "LLM reasoning: similar capacity, similar region..."
+  "Parameters estimated: beta=0.48, lambda=0.62..."
+  This is your interpretability result
+Environment Variables Needed
+ANTHROPIC_API_KEY=your_key
+TAVILY_API_KEY=your_key
+GITHUB_PAGES_BASE_URL=https://yourusername.github.io/energy-health-data
