@@ -11,3 +11,4 @@ data/raw/
 data/processed/
 data/ground_truth/
 knowledge_graph/graph.gexf
+epigrid.pdf
