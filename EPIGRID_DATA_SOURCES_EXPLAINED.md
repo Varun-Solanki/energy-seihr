@@ -8,7 +8,7 @@ Operational feeds: National Grid + DEFRA + NHS Fingertips
   -> ingestion -> normalized records -> knowledge graph -> retrieval context
 Evidence sources: hosted HTML + Tavily cache + graph records
   -> RAG retrieval -> LLM/fallback -> estimated parameters
-Validation source: local NHS hospitalization time series
+  Validation source: local NHS hospitalization time series
   -> compare real H(t) with simulated H(t)
 ```
 Important: most external sources currently influence the model indirectly through retrieval/LLM context. They are not yet direct time-series inputs to the ODE solver.

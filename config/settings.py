@@ -24,6 +24,12 @@ def _domain(url: str) -> str | None:
     return parsed.netloc or None
 
 
+def _path_from_env(name: str, default: Path) -> Path:
+    value = os.getenv(name)
+    path = Path(value) if value else default
+    return path if path.is_absolute() else BASE_DIR / path
+
+
 @dataclass(frozen=True)
 class Settings:
     tavily_api_key: str | None = os.getenv("TAVILY_API_KEY")
@@ -39,6 +45,12 @@ class Settings:
     tavily_allowed_urls: list[str] = None
     hosted_data_dir: Path = BASE_DIR / "hosted-data"
     outputs_dir: Path = BASE_DIR / "outputs"
+    source_registry_path: Path = _path_from_env("SOURCE_REGISTRY_PATH", BASE_DIR / "config" / "source_registry.json")
+    vector_db_provider: str = os.getenv("VECTOR_DB_PROVIDER", "chroma")
+    chroma_persist_dir: Path = _path_from_env("CHROMA_PERSIST_DIR", BASE_DIR / "data" / "chroma")
+    embedding_provider: str = os.getenv("EMBEDDING_PROVIDER", "hashing")
+    embedding_dimension: int = int(os.getenv("EMBEDDING_DIMENSION", "384"))
+    india_air_quality_api_key: str | None = os.getenv("AIR_QUALITY_API_KEY_INDIA")
     backtest_start: str = os.getenv("BACKTEST_START", "2021-01-01")
     backtest_split: str = os.getenv("BACKTEST_SPLIT", "2023-04-01")
     backtest_end: str = os.getenv("BACKTEST_END", "2024-12-31")

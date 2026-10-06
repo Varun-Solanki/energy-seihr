@@ -290,3 +290,102 @@ Environment Variables Needed
 ANTHROPIC_API_KEY=your_key
 TAVILY_API_KEY=your_key
 GITHUB_PAGES_BASE_URL=https://yourusername.github.io/energy-health-data
+
+
+
+
+from mvp to real system
+
+What I Found
+india_yearly_full_release_long_format.csv: 17,214 rows, India/state-year energy data for 2019-2024. It covers capacity, electricity generation, and power-sector emissions across 38 states/UTs.
+Global-Coal-Plant-Tracker-July-2026.xlsx: structured coal-unit dataset. It has 14,674 global unit rows, 1,996 India rows, 52 columns, plant/unit status, capacity, location, ownership, fuel type, retirement/planning fields, and emissions fields.
+Weak coupling...Delhi-NCR...pdf: 9-page scientific PDF. Important claim for the graph: crop-residue burning in Punjab contributed only about ~14% of Delhi-NCR PM2.5 during Oct-Nov 2022, implying weak coupling and the importance of local/regional controls such as GRAP.
+AQI API: the .env has AIR_QUALITY_API_KEY_INDIA, but the code does not load or use it yet. The likely source is India’s official OGD/data.gov.in real-time AQI resource from CPCB/MoEFCC, which provides hourly AQI from monitoring stations across India (data.gov.in AQI resource). I tried a live probe; the endpoint timed out once and then returned 502 Bad Gateway, so the key is present but not runtime-validated yet.
+Current MVP Gap
+Right now the project is UK/Yorkshire-oriented. The runner hardcodes UK region inference, retrieval is Tavily plus local HTML keyword search, and the “knowledge graph” is a small NetworkX/GEXF graph. There is no real vector DB, no Neo4j, no durable document ingestion, no chunk store, and no GraphRAG retrieval planner yet.
+Target Architecture
+We should convert this into a proper India-capable GraphRAG system:
+1. Source Layer
+   - Local files: CSV, XLSX, PDF.
+   - Live APIs: India AQI API.
+   - Optional future sources: health admissions, Census/population, meteorology, wind/transport, policy notifications.
+2. Ingestion Layer
+   - CsvEnergyIngestor for state-year energy mix/emissions.
+   - CoalPlantTrackerIngestor for plant/unit-level coal infrastructure.
+   - PdfStudyIngestor for scientific reports.
+   - IndiaAqiClient for real-time AQI station observations.
+   - Every ingested item gets source provenance, timestamp, checksum, schema version, and citation metadata.
+3. Document Processing
+   - PDF: split by title/section/paragraph, then semantic chunks around 600-1,000 tokens with overlap.
+   - CSV/XLSX: do not chunk raw rows blindly. Convert into structured “facts”:
+     - India Total 2024 coal generation = ... GWh
+     - Maharashtra operating coal capacity = ... MW
+     - Delhi 2024 fossil generation share = ...
+   - AQI API: normalize station observations into city/state/time/pollutant/AQI records.
+4. Vector DB
+   - Recommended: Qdrant for local/prod readiness, metadata filtering, and hybrid search.
+   - Collections:
+     - document_chunks
+     - structured_facts
+     - scientific_claims
+     - scenario_cases
+   - Embeddings:
+     - Use OpenAI embeddings or local sentence-transformer depending on cost/privacy.
+   - Metadata filters:
+     - country, state, city, year, source_type, fuel, pollutant, plant_status, metric.
+5. Neo4j Knowledge Graph
+   Main node types:
+   - Country, StateUT, City, Station
+   - Plant, CoalUnit, Owner
+   - Fuel, EnergyMetric, EmissionMetric
+   - AQIObservation, PollutantObservation
+   - Study, Claim, Policy, HealthOutcome
+   - Scenario, ParameterEstimate, SimulationRun
+   Main relationships:
+   - (:StateUT)-[:PART_OF]->(:Country)
+   - (:CoalUnit)-[:LOCATED_IN]->(:StateUT)
+   - (:CoalUnit)-[:USES_FUEL]->(:Fuel)
+   - (:EnergyMetric)-[:MEASURED_FOR]->(:StateUT)
+   - (:AQIObservation)-[:RECORDED_AT]->(:Station)
+   - (:Claim)-[:SUPPORTED_BY]->(:Study)
+   - (:Claim)-[:ABOUT_REGION]->(:StateUT|City)
+   - (:Plant)-[:CONTRIBUTES_TO]->(:EmissionMetric)
+   - (:EmissionMetric)-[:ASSOCIATED_WITH]->(:PollutantObservation)
+   - (:Scenario)-[:USES_EVIDENCE]->(:Claim|EnergyMetric|AQIObservation)
+6. GraphRAG Retrieval Flow
+   For a user question:
+   - Parse intent: factual answer, comparison, scenario, simulation, policy, health, plant lookup.
+   - Extract entities: state, city, year, pollutant, fuel, plant, policy, health condition.
+   - Retrieve from vector DB for semantic context.
+   - Query Neo4j for exact entity relationships and numeric facts.
+   - Pull live AQI if the user asks for current air quality.
+   - Rerank evidence.
+   - Build a compact context pack:
+     - top semantic chunks
+     - graph paths
+     - structured numeric rows
+     - live API readings
+     - citations/provenance
+   - Generate answer with citations, confidence, and caveats.
+   - For scenario questions, pass retrieved evidence into parameter estimation and simulation.
+7. Generation Layer
+   Answers should be able to handle:
+   - “What is India’s coal dependency trend?”
+   - “Which Indian states have the most operating coal capacity?”
+   - “How does Delhi AQI relate to Punjab/Haryana crop burning?”
+   - “What happens if Chhattisgarh retires 30% coal capacity by 2030?”
+   - “Compare Gujarat and Maharashtra fossil generation and AQI.”
+   - “Which evidence supports the transboundary pollution assumption?”
+8. Simulation Upgrade
+   - Replace hardcoded UK_Yorkshire inference with a region resolver for India states/cities.
+   - Compute x0 from real fossil share/emissions/AQI instead of defaults.
+   - Estimate coupling from adjacency, wind/transport evidence, and graph relationships.
+   - Store every run as SimulationRun in Neo4j with linked evidence and parameters.
+Implementation Phases
+Phase 1: clean config, add India AQI settings, source registry, and typed ingestors.
+Phase 2: build local normalized stores for CSV/XLSX/PDF/API outputs.
+Phase 3: add Qdrant vector DB and embedding pipeline.
+Phase 4: add Neo4j schema, constraints, and graph upsert jobs.
+Phase 5: replace current retriever with GraphRAG retriever.
+Phase 6: generalize scenario runner from Yorkshire-only to arbitrary India regions.
+Phase 7: add evaluation: retrieval tests, graph integrity tests, answer citation tests, and scenario regression tests.

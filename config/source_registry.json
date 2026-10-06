@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "description": "Country-agnostic source registry for EPIGRID GraphRAG ingestion. India is the first production data pack.",
+  "countries": [
+    {
+      "iso3": "IND",
+      "iso2": "IN",
+      "name": "India",
+      "default_admin_level": 1,
+      "sources": [
+        {
+          "id": "ind_energy_yearly_state",
+          "name": "India yearly state energy, generation, and emissions",
+          "source_type": "csv",
+          "path": "data/raw/india/india_yearly_full_release_long_format.csv",
+          "adapter": "IndiaEnergyIngestor",
+          "update_frequency": "annual",
+          "provenance": {
+            "publisher": "Provided local dataset",
+            "release": "2019-2024 long format",
+            "license": "unknown"
+          },
+          "metadata": {
+            "country_iso3": "IND",
+            "admin_level": 1,
+            "grain": "state-year-metric",
+            "primary_dimensions": ["State", "Year", "Category", "Subcategory", "Variable", "Unit"]
+          }
+        },
+        {
+          "id": "ind_delhi_ncr_pm25_crb_study_2025",
+          "name": "Weak coupling of observed surface PM2.5 in Delhi-NCR with rice crop residue burning in Punjab and Haryana",
+          "source_type": "pdf",
+          "path": "data/raw/india/Weak coupling of observed surface PM2.5 in Delhi-NCR with rice crop residue burning in Punjab and Haryana.pdf",
+          "adapter": "GenericPdfStudyIngestor",
+          "update_frequency": "static",
+          "provenance": {
+            "publisher": "npj Climate and Atmospheric Science",
+            "release": "2025",
+            "doi": "10.1038/s41612-025-00901-8",
+            "license": "publisher terms"
+          },
+          "metadata": {
+            "country_iso3": "IND",
+            "regions": ["Delhi", "Haryana", "Punjab"],
+            "pollutants": ["PM2.5", "CO"],
+            "evidence_type": "scientific_study"
+          }
+        },
+        {
+          "id": "ind_realtime_aqi",
+          "name": "Real-time Air Quality Index from various locations",
+          "source_type": "api",
+          "endpoint": "https://api.data.gov.in/resource/real-time-air-quality-index-various-locations",
+          "api_key_env": "AIR_QUALITY_API_KEY_INDIA",
+          "adapter": "IndiaAQIIngestor",
+          "update_frequency": "real_time",
+          "provenance": {
+            "publisher": "Central Pollution Control Board / data.gov.in",
+            "release": "real-time",
+            "license": "Government Open Data terms"
+          },
+          "metadata": {
+            "country_iso3": "IND",
+            "grain": "station-pollutant-observation",
+            "pollutants": ["AQI", "PM2.5", "PM10", "NO2", "SO2", "CO", "OZONE", "NH3"]
+          }
+        }
+      ]
+    }
+  ],
+  "shared_sources": [
+    {
+      "id": "global_coal_plant_tracker_2026_07",
+      "name": "Global Coal Plant Tracker",
+      "source_type": "xlsx",
+      "path": "data/raw/global/Global-Coal-Plant-Tracker-July-2026.xlsx",
+      "adapter": "GlobalCoalPlantTrackerIngestor",
+      "update_frequency": "periodic",
+      "provenance": {
+        "publisher": "Global Energy Monitor",
+        "release": "July 2026",
+        "license": "Creative Commons Attribution 4.0 International"
+      },
+      "metadata": {
+        "country_iso3": "GLOBAL",
+        "grain": "coal-unit",
+        "country_column": "Country/Area",
+        "sheet": "Units"
+      }
+    }
+  ]
+}

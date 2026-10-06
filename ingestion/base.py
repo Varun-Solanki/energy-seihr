@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
 
@@ -24,6 +24,12 @@ class NormalizedRecord:
     value: float | int | str | None
     unit: str | None = None
     metadata: dict[str, Any] | None = None
+    source_id: str | None = None
+    country_iso3: str | None = None
+    region_code: str | None = None
+    admin_level: int | None = None
+    observed_at: str | None = None
+    provenance: dict[str, Any] = field(default_factory=dict)
 
 
 class SourceClient(Protocol):

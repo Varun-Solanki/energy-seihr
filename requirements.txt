@@ -7,3 +7,6 @@ tavily-python
 openai
 requests
 pytest
+openpyxl
+pdfplumber
+chromadb
