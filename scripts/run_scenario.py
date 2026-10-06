@@ -85,7 +85,9 @@ def main() -> None:
         trace=estimator.last_trace,
     )
 
-    print_summary(scenario, output, counterfactual_output, target_region, artifact_paths)
+    impact = impact_summary(output, counterfactual_output, target_region)
+    explanation = client.generate_explanation(scenario_text, impact, target_region)
+    print_summary(scenario, output, counterfactual_output, target_region, artifact_paths, explanation)
 
 
 def parse_args() -> argparse.Namespace:
@@ -341,6 +343,7 @@ def print_summary(
     counterfactual_output,
     target_region: str,
     artifact_paths: dict[str, str],
+    explanation: str = ""
 ) -> None:
     print("\n" + "=" * 70)
     print("SCENARIO COMPLETE")
@@ -367,6 +370,12 @@ def print_summary(
         f"{impact['avoided_hospital_days']:.0f} ({impact['avoided_hospital_days_percent']:.1f}%)"
     )
     print(f"  Final H, scenario/counterfactual: {impact['scenario_final_hospitalized']:.0f} / {impact['counterfactual_final_hospitalized']:.0f}")
+
+    if explanation:
+        print("\n" + "=" * 70)
+        print("AI EXPLANATION")
+        print("=" * 70)
+        print(explanation)
 
     print("\nArtifacts")
     for label, path in artifact_paths.items():

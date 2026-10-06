@@ -193,6 +193,34 @@ Return only this JSON shape:
             
         return self._fallback_resolve_regions(scenario_description)
 
+
+    def generate_explanation(self, scenario_description: str, impact_summary: dict, target_region: str) -> str:
+        """Generate a public health and energy policy explanation of the numeric results."""
+        if not self.client:
+            return "No explanation generated: OpenRouter API key not configured (fallback mode)."
+
+        prompt = f"""
+You are a public health and energy policy expert. I just ran a SEIHR ODE simulation for {target_region}.
+Scenario: '{scenario_description}'
+
+Here are the numerical results:
+- Counterfactual Peak Hospitalizations: {impact_summary.get('counterfactual_peak_hospitalized', 0):.0f}
+- Scenario Peak Hospitalizations: {impact_summary.get('scenario_peak_hospitalized', 0):.0f}
+- Avoided Hospital-Days: {impact_summary.get('avoided_hospital_days', 0):.0f} ({impact_summary.get('avoided_hospital_days_percent', 0):.1f}%)
+
+Write a short, 2-paragraph explanation of what happened in this scenario, why hospitalizations changed based on the fossil energy changes, and what it means for public health policy.
+"""
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.3,
+                max_tokens=350,
+            )
+            return response.choices[0].message.content or "No explanation generated."
+        except Exception as exc:
+            return f"Explanation generation error: {exc}"
+
     def _fallback_resolve_regions(self, scenario_description: str) -> tuple[str, str]:
         text = scenario_description.lower()
         if "delhi" in text:
