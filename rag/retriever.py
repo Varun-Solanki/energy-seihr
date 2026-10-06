@@ -12,6 +12,7 @@ from tavily import TavilyClient
 
 from config.settings import settings
 from knowledge_graph.querier import KnowledgeGraphQuerier
+from rag.vector_store import ChromaEvidenceStore
 
 
 @dataclass(frozen=True)
@@ -20,6 +21,7 @@ class RetrievedContext:
     tavily_results: list[dict[str, Any]]
     graph_context: list[dict[str, Any]]
     local_documents: list[dict[str, Any]]
+    vector_results: list[dict[str, Any]] | None = None
     timestamp: str = ""
     cache_hit: bool = False
 
@@ -37,6 +39,13 @@ class Retriever:
         self.cache_dir = cache_dir or Path("data/retrieval_cache")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         
+        # Load vector store
+        try:
+            self.vector_store = ChromaEvidenceStore()
+        except Exception as e:
+            print(f"Warning: Could not initialize ChromaEvidenceStore: {e}")
+            self.vector_store = None
+
         # Load graph if available
         self.querier = None
         if self.graph_path.exists():
@@ -72,6 +81,7 @@ class Retriever:
                     tavily_results=cached.tavily_results,
                     graph_context=cached.graph_context,
                     local_documents=cached.local_documents,
+                    vector_results=cached.vector_results,
                     timestamp=cached.timestamp,
                     cache_hit=True,
                 )
@@ -81,6 +91,23 @@ class Retriever:
         tavily_results = self._search_tavily(query)
         local_documents = self._search_local_documents(query)
         
+        # Vector search
+        vector_results = []
+        if getattr(self, 'vector_store', None):
+            try:
+                v_results = self.vector_store.query(query, n_results=5, hybrid=True)
+                vector_results = [
+                    {
+                        'chunk_id': r.chunk_id,
+                        'content': r.content,
+                        'score': r.score,
+                        'metadata': r.metadata,
+                    }
+                    for r in v_results
+                ]
+            except Exception as e:
+                print(f'Vector search error: {e}')
+
         # Graph context
         graph_context = self._search_graph(region) if region and self.querier else []
         
@@ -89,6 +116,7 @@ class Retriever:
             tavily_results=tavily_results,
             graph_context=graph_context,
             local_documents=local_documents,
+            vector_results=vector_results,
             timestamp=datetime.now().isoformat(),
             cache_hit=False,
         )
@@ -145,6 +173,18 @@ class Retriever:
                 lines.append(f"\n{i}. {item.get('title', item.get('path', 'local document'))}")
                 lines.append(f"   Path: {item.get('path', '')}")
                 lines.append(f"   {item.get('snippet', '')[:700]}...")
+
+        if context.vector_results:
+            lines.append('\n=== VECTOR DB SEMANTIC SEARCH RESULTS ===')
+            for i, result in enumerate(context.vector_results[:5], 1):
+                chunk_id = result.get('chunk_id', 'Unknown')
+                score = result.get('score') or 0.0
+                lines.append(f'\n{i}. [Chunk {chunk_id}] (Score: {score:.2f})')
+                meta = result.get('metadata', {})
+                source = meta.get('source_name', 'Unknown')
+                lines.append(f'   Source: {source}')
+                content_str = result.get('content', '')
+                lines.append(f'   {content_str[:500]}...')
         
         if context.graph_context:
             lines.append("\n=== LOCAL KNOWLEDGE GRAPH CONTEXT ===")
@@ -255,6 +295,7 @@ class Retriever:
                 with open(cache_file) as f:
                     data = json.load(f)
                     data.setdefault("local_documents", [])
+                    data.setdefault("vector_results", [])
                     if not data["local_documents"]:
                         data["local_documents"] = self._search_local_documents(data.get("query", ""))
                     return RetrievedContext(**data)
@@ -273,6 +314,7 @@ class Retriever:
                         "tavily_results": context.tavily_results,
                         "graph_context": context.graph_context,
                         "local_documents": context.local_documents,
+                        "vector_results": context.vector_results,
                         "timestamp": context.timestamp,
                         "cache_hit": False,
                     },

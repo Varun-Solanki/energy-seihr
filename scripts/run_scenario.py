@@ -29,8 +29,10 @@ STATE_NAMES = ["S", "E", "I", "H", "R", "X"]
 def main() -> None:
     args = parse_args()
     scenario_text = args.scenario
-    target_region = infer_region(scenario_text)
-    regions = ordered_regions(target_region)
+    from llm.llama_client import LlamaClient
+    client = LlamaClient()
+    target_region, companion_region = client.resolve_regions(scenario_text)
+    regions = [target_region, companion_region]
     start_date = args.start_date or date.today().isoformat()
     end_date = args.end_date or infer_end_date(scenario_text, start_date)
     slug = slugify(scenario_text)

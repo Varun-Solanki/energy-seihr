@@ -136,6 +136,8 @@ class ParameterEstimator:
             "health_tavily_results": health_context.tavily_results,
             "policy_local_documents": policy_context.local_documents,
             "health_local_documents": health_context.local_documents,
+            "policy_vector_results": policy_context.vector_results,
+            "health_vector_results": health_context.vector_results,
             "policy_graph_context": policy_context.graph_context,
             "health_graph_context": health_context.graph_context,
             "llm_model": self.llm.model,

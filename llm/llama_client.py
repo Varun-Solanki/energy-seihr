@@ -158,6 +158,63 @@ Return only this JSON shape:
                 continue
         return params
 
+
+    def resolve_regions(self, scenario_description: str) -> tuple[str, str]:
+        """Extract target region and a plausible downwind companion region."""
+        if not self.client:
+            return self._fallback_resolve_regions(scenario_description)
+            
+        prompt = (
+            f"Analyze this scenario: '{scenario_description}'\n"
+            "Identify the primary target region and a plausible downwind/neighboring companion region.\n"
+            "Format your response as strict JSON: {\"target\": \"Country_Region\", \"companion\": \"Country_Neighbor\"}\n"
+            "Example: {\"target\": \"India_Delhi\", \"companion\": \"India_UttarPradesh\"}\n"
+            "Example: {\"target\": \"UK_Yorkshire\", \"companion\": \"UK_SouthEast\"}\n"
+            "Return ONLY the JSON."
+        )
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.1,
+                max_tokens=100,
+            )
+            content = response.choices[0].message.content or ""
+            import json
+            import re
+            json_match = re.search(r"\{.*\}", content, re.DOTALL)
+            if json_match:
+                payload = json.loads(json_match.group(0))
+                target = payload.get("target", "Unknown_Target")
+                companion = payload.get("companion", "Unknown_Companion")
+                return target, companion
+        except Exception as exc:
+            print(f"Region resolution error: {exc}")
+            
+        return self._fallback_resolve_regions(scenario_description)
+
+    def _fallback_resolve_regions(self, scenario_description: str) -> tuple[str, str]:
+        text = scenario_description.lower()
+        if "delhi" in text:
+            return "India_Delhi", "India_UttarPradesh"
+        if "punjab" in text:
+            return "India_Punjab", "India_Delhi"
+        if "haryana" in text:
+            return "India_Haryana", "India_Delhi"
+        if "maharashtra" in text or "mumbai" in text:
+            return "India_Maharashtra", "India_Gujarat"
+        if "yorkshire" in text:
+            return "UK_Yorkshire", "UK_SouthEast"
+        if "south east" in text or "southeast" in text:
+            return "UK_SouthEast", "UK_Yorkshire"
+        if "germany" in text:
+            return "Germany_Ruhr", "Germany_Bavaria"
+            
+        # Generic fallback
+        words = [w.capitalize() for w in text.split() if len(w) > 4]
+        primary = words[0] if words else "Unknown"
+        return f"Global_{primary}", f"Global_{primary}Companion"
+
     def _fallback_parameters(
         self,
         region: str,
