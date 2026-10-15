@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2026-07-25">
+    <creator>NetworkX 3.6.1</creator>
+  </meta>
+  <graph defaultedgetype="directed" mode="static" name="">
+    <attributes mode="static" class="edge">
+      <attribute id="4" title="kind" type="string" />
+      <attribute id="5" title="lag_days" type="long" />
+      <attribute id="6" title="relation" type="string" />
+    </attributes>
+    <attributes mode="static" class="node">
+      <attribute id="0" title="kind" type="string" />
+      <attribute id="1" title="region" type="string" />
+      <attribute id="2" title="value" type="string" />
+      <attribute id="3" title="unit" type="string" />
+    </attributes>
+    <nodes>
+      <node id="region::UK_Yorkshire" label="UK_Yorkshire">
+        <attvalues>
+          <attvalue for="0" value="Region" />
+          <attvalue for="1" value="UK_Yorkshire" />
+        </attvalues>
+      </node>
+      <node id="region::UK_SouthEast" label="UK_SouthEast">
+        <attvalues>
+          <attvalue for="0" value="Region" />
+          <attvalue for="1" value="UK_SouthEast" />
+        </attvalues>
+      </node>
+      <node id="event::drax_closure_2023" label="Drax coal unit closure 2023">
+        <attvalues>
+          <attvalue for="0" value="EnergyEvent" />
+          <attvalue for="1" value="UK_Yorkshire" />
+          <attvalue for="2" value="coal generation reduction" />
+          <attvalue for="3" value="policy_event" />
+        </attvalues>
+      </node>
+      <node id="event::uk_coal_phaseout_2024" label="UK coal phase-out completed 2024">
+        <attvalues>
+          <attvalue for="0" value="PolicyEvent" />
+          <attvalue for="1" value="UK_Yorkshire" />
+          <attvalue for="2" value="coal phase-out" />
+          <attvalue for="3" value="policy_event" />
+        </attvalues>
+      </node>
+      <node id="event::pm25_health_link" label="PM2.5 linked respiratory and cardiovascular admissions">
+        <attvalues>
+          <attvalue for="0" value="HealthEvent" />
+          <attvalue for="1" value="UK_Yorkshire" />
+          <attvalue for="2" value="hospitalization pressure" />
+          <attvalue for="3" value="health_event" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="region::UK_Yorkshire" target="region::UK_SouthEast" id="0" weight="0.001">
+        <attvalues>
+          <attvalue for="4" value="DOWNWIND_OF" />
+        </attvalues>
+      </edge>
+      <edge source="event::drax_closure_2023" target="event::pm25_health_link" id="1">
+        <attvalues>
+          <attvalue for="4" value="PRECEDED" />
+          <attvalue for="5" value="90" />
+        </attvalues>
+      </edge>
+      <edge source="event::drax_closure_2023" target="region::UK_Yorkshire" id="2">
+        <attvalues>
+          <attvalue for="4" value="DERIVED_FROM" />
+          <attvalue for="6" value="region" />
+        </attvalues>
+      </edge>
+      <edge source="event::uk_coal_phaseout_2024" target="event::drax_closure_2023" id="3">
+        <attvalues>
+          <attvalue for="4" value="TRIGGERED" />
+          <attvalue for="5" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="event::pm25_health_link" target="region::UK_Yorkshire" id="4">
+        <attvalues>
+          <attvalue for="4" value="DERIVED_FROM" />
+          <attvalue for="6" value="region" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

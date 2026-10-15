@@ -1,0 +1,47 @@
+{
+  "timestamp": "2026-07-25T16:27:56.788192",
+  "num_backtests": 2,
+  "results": [
+    {
+      "region": "UK_Yorkshire",
+      "scenario": "Drax Closure",
+      "date_range": "2023-04-01 to 2024-12-31",
+      "metrics": {
+        "mse": 49560238.269435234,
+        "rmse": 7039.903285517155,
+        "mae": 3916.701760919265,
+        "r_squared": -8559.382684894754,
+        "peak_error": 27502.316049764482,
+        "peak_error_time": 95
+      },
+      "predicted_H_init": 50.0,
+      "predicted_H_final": 1682.0137751824816,
+      "actual_H_init": 192.04496559727156,
+      "actual_H_final": 21.604551993271087
+    },
+    {
+      "region": "UK_SouthEast",
+      "scenario": "Drax Closure",
+      "date_range": "2023-04-01 to 2024-12-31",
+      "metrics": {
+        "mse": 831107716.1770724,
+        "rmse": 28828.93886665051,
+        "mae": 18561.050973253285,
+        "r_squared": -133945.54330714172,
+        "peak_error": 112099.25963549415,
+        "peak_error_time": 89
+      },
+      "predicted_H_init": 100.0,
+      "predicted_H_final": 23169.66837148184,
+      "actual_H_init": 508.01396128102635,
+      "actual_H_final": 360.05496029456106
+    }
+  ],
+  "summary": {
+    "mean_rmse": 17934.421076083832,
+    "mean_mae": 11238.876367086275,
+    "mean_r2": -71252.46299601824,
+    "best_fit_region": "UK_Yorkshire",
+    "worst_fit_region": "UK_SouthEast"
+  }
+}

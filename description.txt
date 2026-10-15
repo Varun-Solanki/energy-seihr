@@ -13,3 +13,19 @@ The system is parameterized dynamically using a large language model combined wi
 The system is validated through backtesting on real historical events where generation mix data, air quality records, and hospitalization statistics are publicly available. The simulation's predicted trajectories are compared against what actually happened, providing quantitative accuracy metrics. Over time, the retrieval system improves: historical cases that led to accurate predictions are weighted more heavily in future retrievals, and cases that led to poor predictions are down-weighted — a lightweight feedback mechanism that improves system performance without any model training.
 
 The MVP demonstrates the complete pipeline on one historical event, showing the full cycle from signal ingestion through parameter estimation, simulation, scenario branching, and validation against ground truth data.
+
+
+
+
+
+
+
+
+
+
+
+Cumulative Burden Error: We fed the test a predicted hospital total of 60 and an actual total of 50. The test perfectly calculated the error as 20.0%.
+
+Parameter Prior Violations: We gave the test a set of valid AI parameters, which scored 0 violations (perfect score). We then gave it a fake set of physically impossible numbers (like a negative transmission rate), and the system successfully caught all 3 violations.
+
+Faithfulness Score: We gave the test a sample AI explanation and sample documents. The metric successfully scanned the documents, found 5 out of the 8 main keywords, and gave the AI a faithfulness score of 0.625 (62.5%).

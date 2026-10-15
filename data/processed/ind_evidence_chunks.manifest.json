@@ -1,0 +1,16 @@
+{
+  "input_path": "C:\\Users\\Varun\\OneDrive\\Desktop\\energy-seihr\\data\\processed\\ind_normalized_records.jsonl",
+  "output_path": "C:\\Users\\Varun\\OneDrive\\Desktop\\energy-seihr\\data\\processed\\ind_evidence_chunks.jsonl",
+  "chunk_count": 19219,
+  "counts_by_type": {
+    "document_chunk": 9,
+    "structured_fact": 19210
+  },
+  "counts_by_source": {
+    "global_coal_plant_tracker_2026_07": 1996,
+    "ind_delhi_ncr_pm25_crb_study_2025": 9,
+    "ind_energy_yearly_state": 17214
+  },
+  "document_chunk_words": 700,
+  "document_overlap_words": 90
+}
